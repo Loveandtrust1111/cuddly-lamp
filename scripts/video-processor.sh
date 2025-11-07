@@ -132,17 +132,24 @@ if [ "$GENERATE_THUMBNAIL" = true ]; then
     echo "Generating thumbnail..."
     
     # Get video duration in seconds
-    DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT_FILE" 2>/dev/null || echo "0")
+    DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT_FILE" 2>/dev/null || echo "1.0")
     
-    # Calculate thumbnail timestamp (10% of duration or 0.5 seconds, whichever is smaller)
-    if [ "$DURATION" != "0" ]; then
-        THUMB_TIME=$(awk -v d="$DURATION" 'BEGIN {t = d * 0.1; if (t > 0.5) t = 0.5; if (t < 0) t = 0; printf "%.2f", t}')
-    else
-        THUMB_TIME="0"
+    # Validate that DURATION is a valid number
+    if ! [[ "$DURATION" =~ ^[0-9]+\.?[0-9]*$ ]]; then
+        DURATION="1.0"
     fi
     
-    # Extract frame at calculated timestamp
-    ffmpeg -i "$INPUT_FILE" -ss "$THUMB_TIME" -vframes 1 -q:v 2 "$THUMBNAIL_FILE" -y 2>/dev/null
+    # Calculate thumbnail timestamp (minimum of 10% of duration or 0.5 seconds)
+    THUMB_TIME=$(awk -v d="$DURATION" 'BEGIN {
+        ten_percent = d * 0.1;
+        threshold = 0.5;
+        t = (ten_percent < threshold) ? ten_percent : threshold;
+        if (t < 0) t = 0;
+        printf "%.2f", t
+    }')
+    
+    # Extract frame at calculated timestamp, show errors for debugging
+    ffmpeg -i "$INPUT_FILE" -ss "$THUMB_TIME" -vframes 1 -q:v 2 "$THUMBNAIL_FILE" -y 2>&1 | grep -v "^frame=" | grep -v "^Stream " | grep -v "^  " | grep -v "^$" || true
     
     if [ $? -eq 0 ]; then
         echo "✓ Thumbnail generated: $THUMBNAIL_FILE"

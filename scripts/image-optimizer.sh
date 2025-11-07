@@ -135,10 +135,19 @@ for ext in jpg jpeg png gif bmp tiff; do
             echo "  Optimized (quality: ${QUALITY}%)"
         fi
         
-        # Remove backup after successful processing
-        rm "$BACKUP"
-        CURRENT_BACKUP=""
-        PROCESSED=$((PROCESSED + 1))
+        # Verify the converted image is valid before removing backup
+        if identify "$file" &>/dev/null; then
+            # Remove backup after successful verification
+            rm "$BACKUP"
+            CURRENT_BACKUP=""
+            PROCESSED=$((PROCESSED + 1))
+        else
+            # Restore from backup if conversion failed
+            echo "  Error: Conversion failed, restoring from backup"
+            mv "$BACKUP" "$file"
+            CURRENT_BACKUP=""
+            SKIPPED=$((SKIPPED + 1))
+        fi
         
     done < <(find "$TARGET_DIR" -type f -iname "*.${ext}" -print0)
 done
