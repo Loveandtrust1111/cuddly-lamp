@@ -85,35 +85,18 @@ optimize_image() {
     local original_size=$(stat -f%z "$input" 2>/dev/null || stat -c%s "$input" 2>/dev/null)
     
     # Optimize the image
+    local convert_cmd="convert \"$input\" -resize \"${MAX_WIDTH}x${MAX_WIDTH}>\" -strip"
+    
+    # Add quality setting for JPEG
     if [[ "$extension_lower" =~ ^(jpg|jpeg)$ ]]; then
-        # JPEG optimization
-        convert "$input" \
-            -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
-            -quality "$QUALITY" \
-            -strip \
-            "$output" 2>/dev/null || {
-                echo -e "${RED}Failed to process: $filename${NC}"
-                return
-            }
-    elif [[ "$extension_lower" =~ ^(png)$ ]]; then
-        # PNG optimization
-        convert "$input" \
-            -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
-            -strip \
-            "$output" 2>/dev/null || {
-                echo -e "${RED}Failed to process: $filename${NC}"
-                return
-            }
-    else
-        # Other formats
-        convert "$input" \
-            -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
-            -strip \
-            "$output" 2>/dev/null || {
-                echo -e "${RED}Failed to process: $filename${NC}"
-                return
-            }
+        convert_cmd="$convert_cmd -quality \"$QUALITY\""
     fi
+    
+    # Execute the conversion
+    eval "$convert_cmd \"$output\"" 2>/dev/null || {
+        echo -e "${RED}Failed to process: $filename${NC}"
+        return
+    }
     
     # Get new size and calculate savings
     local new_size=$(stat -f%z "$output" 2>/dev/null || stat -c%s "$output" 2>/dev/null)
