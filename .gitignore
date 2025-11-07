@@ -38,6 +38,10 @@ out/
 *.o
 *.so
 *.exe
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
 
 # Temporary files
 tmp/

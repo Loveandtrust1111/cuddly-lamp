@@ -22,7 +22,29 @@ This repository provides a clean starting point for new projects with proper doc
    cd cuddly-lamp
    ```
 
-2. Start building your project!
+2. Install dependencies:
+   ```bash
+   pip install pytest
+   ```
+
+3. Run tests:
+   ```bash
+   python3 -m pytest -v
+   ```
+
+## Code Examples
+
+This repository demonstrates refactoring of duplicated code patterns:
+
+### calculator.py
+- **Before**: Repeated input validation in each arithmetic function (91 lines)
+- **After**: Extracted validation into reusable helper functions (69 lines)
+- **Improvement**: 24% reduction in code, better maintainability
+
+### data_processor.py
+- **Before**: Repeated data validation and field checking (56 lines)
+- **After**: Generic validation function with configurable fields (41 lines)
+- **Improvement**: 27% reduction in code, more flexible design
 
 ## Performance Optimization
 
