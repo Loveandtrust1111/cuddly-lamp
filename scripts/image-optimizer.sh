@@ -74,8 +74,9 @@ optimize_image() {
         echo "Processing: $filename"
     fi
     
-    # Check if file is an image
-    if [[ ! "$extension" =~ ^(jpg|jpeg|png|gif|webp|JPG|JPEG|PNG|GIF|WEBP)$ ]]; then
+    # Check if file is an image (case-insensitive)
+    extension_lower=$(echo "$extension" | tr '[:upper:]' '[:lower:]')
+    if [[ ! "$extension_lower" =~ ^(jpg|jpeg|png|gif|webp)$ ]]; then
         echo -e "${YELLOW}Skipping non-image file: $filename${NC}"
         return
     fi
@@ -84,7 +85,7 @@ optimize_image() {
     local original_size=$(stat -f%z "$input" 2>/dev/null || stat -c%s "$input" 2>/dev/null)
     
     # Optimize the image
-    if [[ "$extension" =~ ^(jpg|jpeg|JPG|JPEG)$ ]]; then
+    if [[ "$extension_lower" =~ ^(jpg|jpeg)$ ]]; then
         # JPEG optimization
         convert "$input" \
             -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
@@ -94,7 +95,7 @@ optimize_image() {
                 echo -e "${RED}Failed to process: $filename${NC}"
                 return
             }
-    elif [[ "$extension" =~ ^(png|PNG)$ ]]; then
+    elif [[ "$extension_lower" =~ ^(png)$ ]]; then
         # PNG optimization
         convert "$input" \
             -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \

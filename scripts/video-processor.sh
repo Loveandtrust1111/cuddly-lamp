@@ -75,8 +75,8 @@ extract_thumbnail() {
     
     echo "Extracting thumbnail..."
     
-    # Extract frame at 1 second
-    ffmpeg -i "$input" -ss 00:00:01 -vframes 1 -q:v 2 "$thumbnail" -y &>/dev/null || {
+    # Extract frame at 1 second (ss before -i for better performance)
+    ffmpeg -ss 00:00:01 -i "$input" -vframes 1 -q:v 2 "$thumbnail" -y &>/dev/null || {
         echo -e "${RED}Failed to extract thumbnail${NC}"
         return 1
     }
@@ -101,9 +101,11 @@ process_video() {
     
     # Process the video
     echo "Converting video..."
+    local vf_string="scale=$RESOLUTION:force_original_aspect_ratio=decrease,pad=$RESOLUTION:(ow-iw)/2:(oh-ih)/2"
+    
     if [ "$VERBOSE" -eq 1 ]; then
         ffmpeg -i "$input" \
-            -vf "scale=$RESOLUTION:force_original_aspect_ratio=decrease,pad=$RESOLUTION:(ow-iw)/2:(oh-ih)/2" \
+            -vf "$vf_string" \
             -c:v libx264 \
             -preset medium \
             -b:v "$BITRATE" \
@@ -113,7 +115,7 @@ process_video() {
             "$output" -y
     else
         ffmpeg -i "$input" \
-            -vf "scale=$RESOLUTION:force_original_aspect_ratio=decrease,pad=$RESOLUTION:(ow-iw)/2:(oh-ih)/2" \
+            -vf "$vf_string" \
             -c:v libx264 \
             -preset medium \
             -b:v "$BITRATE" \
