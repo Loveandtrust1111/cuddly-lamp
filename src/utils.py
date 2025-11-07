@@ -36,12 +36,17 @@ def validate_positive_number(value, field_name):
     Raises:
         ValueError: If value is None or not greater than 0.
     """
-    if not value or value <= 0:
+    if value is None or value <= 0:
         raise ValueError(f"{field_name} must be greater than 0")
 
 
 def validate_email(email):
     """Validate email address format.
+    
+    Note: This is a basic validation for demonstration purposes.
+    For production use, consider using a more robust email validation library
+    or regex pattern that handles edge cases like multiple @ symbols,
+    missing local/domain parts, etc.
     
     Args:
         email: Email address to validate.
