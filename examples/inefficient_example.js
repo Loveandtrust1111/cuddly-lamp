@@ -29,12 +29,15 @@ function inefficientArrayIteration(arr) {
 
 /**
  * INEFFICIENT: Creating functions inside loops
+ * Note: This demonstrates the closure bug where all handlers
+ * reference the same variable, resulting in unexpected behavior.
  */
 function inefficientFunctionCreation(items) {
     const handlers = [];
     for (let i = 0; i < items.length; i++) {
-        handlers.push(function() {  // New function object created each iteration
-            console.log(items[i]);
+        // BUG: All functions will reference the final value of i
+        handlers.push(function() {
+            console.log(items[i]);  // i will be items.length when called
         });
     }
     return handlers;

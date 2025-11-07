@@ -31,13 +31,32 @@ def efficient_nested_loops(list1, list2):
     return list(set(list1) & set(list2))
 
 
+def efficient_file_reading_generator(filename):
+    """
+    EFFICIENT: Processing file line by line using generator.
+    Memory: O(1) per line - truly memory efficient
+    """
+    try:
+        with open(filename, 'r') as f:
+            for line in f:
+                yield line.upper()
+    except FileNotFoundError:
+        print(f"Warning: File {filename} not found")
+        return
+
+
 def efficient_file_reading(filename):
     """
-    EFFICIENT: Processing file line by line without loading entire file.
-    Memory: O(1) per line
+    EFFICIENT: Processing file line by line with list comprehension.
+    Memory: O(n) but more efficient than read() + split()
+    Note: For truly memory-efficient processing, use the generator version above.
     """
-    with open(filename, 'r') as f:
-        return [line.upper() for line in f]
+    try:
+        with open(filename, 'r') as f:
+            return [line.upper() for line in f]
+    except FileNotFoundError:
+        print(f"Warning: File {filename} not found")
+        return []
 
 
 def efficient_data_processing(data):

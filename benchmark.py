@@ -65,7 +65,7 @@ def main():
     print("\n[2] List Search - Duplicate Removal (1,000 items with duplicates)")
     data = list(range(100)) * 10
     ineff_time, ineff_result = benchmark(inefficient_list_search, data, None)
-    eff_time, eff_result = benchmark(efficient_list_search, data)
+    eff_time, eff_result = benchmark(efficient_list_search, data, None)
     print_benchmark_result("List Search", ineff_time, eff_time)
     print(f"  Results match: {set(ineff_result) == set(eff_result)}")
     

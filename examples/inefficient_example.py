@@ -47,11 +47,17 @@ def inefficient_file_reading(filename):
     """
     INEFFICIENT: Reading entire file into memory at once.
     Memory: O(n) where n is file size
+    Note: This example assumes file exists for demonstration purposes.
+    In production code, always add proper error handling.
     """
-    with open(filename, 'r') as f:
-        content = f.read()
-        lines = content.split('\n')
-        return [line.upper() for line in lines]
+    try:
+        with open(filename, 'r') as f:
+            content = f.read()
+            lines = content.split('\n')
+            return [line.upper() for line in lines]
+    except FileNotFoundError:
+        print(f"Warning: File {filename} not found")
+        return []
 
 
 def inefficient_data_processing(data):

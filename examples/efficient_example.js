@@ -159,6 +159,20 @@ function debounce(func, wait) {
     };
 }
 
+function computeExpensiveValue(obj) {
+    /**
+     * Simulated expensive operation that takes significant time.
+     * In reality, this could be parsing, validation, transformation, etc.
+     */
+    let result = 0;
+    const keys = Object.keys(obj);
+    // Simulate some expensive computation
+    for (let i = 0; i < keys.length * 1000; i++) {
+        result += keys.length;
+    }
+    return result;
+}
+
 /**
  * EFFICIENT: Use WeakMap for memory-efficient caching
  */
@@ -167,14 +181,9 @@ function efficientCaching(obj) {
     if (cache.has(obj)) {
         return cache.get(obj);
     }
-    const result = expensiveOperation(obj);
+    const result = computeExpensiveValue(obj);
     cache.set(obj, result);
     return result;
-}
-
-function expensiveOperation(obj) {
-    // Simulated expensive operation
-    return Object.keys(obj).length;
 }
 
 /**
