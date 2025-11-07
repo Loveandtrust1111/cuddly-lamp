@@ -1,16 +1,19 @@
-"""A simple data processor module with duplicated code patterns."""
+"""A simple data processor module with refactored code."""
+
+
+def _validate_data(data, data_type, required_fields):
+    """Validate that data is not empty and contains required fields."""
+    if not data:
+        raise ValueError(f"{data_type} data cannot be empty")
+    
+    for field in required_fields:
+        if field not in data:
+            raise KeyError(f"{data_type} must have a {field}")
 
 
 def process_user_data(user):
     """Process user data and return formatted string."""
-    if not user:
-        raise ValueError("User data cannot be empty")
-    
-    if "name" not in user:
-        raise KeyError("User must have a name")
-    
-    if "email" not in user:
-        raise KeyError("User must have an email")
+    _validate_data(user, "User", ["name", "email"])
     
     name = user["name"].strip().title()
     email = user["email"].strip().lower()
@@ -20,14 +23,7 @@ def process_user_data(user):
 
 def process_product_data(product):
     """Process product data and return formatted string."""
-    if not product:
-        raise ValueError("Product data cannot be empty")
-    
-    if "name" not in product:
-        raise KeyError("Product must have a name")
-    
-    if "price" not in product:
-        raise KeyError("Product must have a price")
+    _validate_data(product, "Product", ["name", "price"])
     
     name = product["name"].strip().title()
     price = float(product["price"])
@@ -37,14 +33,7 @@ def process_product_data(product):
 
 def process_order_data(order):
     """Process order data and return formatted string."""
-    if not order:
-        raise ValueError("Order data cannot be empty")
-    
-    if "id" not in order:
-        raise KeyError("Order must have an id")
-    
-    if "total" not in order:
-        raise KeyError("Order must have a total")
+    _validate_data(order, "Order", ["id", "total"])
     
     order_id = str(order["id"]).strip()
     total = float(order["total"])
