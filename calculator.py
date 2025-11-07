@@ -43,10 +43,13 @@ def multiply_numbers(a, b):
 
 def divide_numbers(a, b):
     """Divide two numbers and return the result."""
-    _validate_number(b, "Second argument")  # Validate b first for zero check
+    _validate_number(a, "First argument")
+    _validate_number(b, "Second argument")
     if b == 0:
         raise ValueError("Cannot divide by zero")
-    return _perform_operation(a, b, "/", lambda x, y: x / y)
+    result = a / b
+    print(f"Operation: {a} / {b} = {result}")
+    return result
 
 
 def calculate_average(numbers):

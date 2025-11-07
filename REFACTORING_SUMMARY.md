@@ -84,8 +84,8 @@ def _validate_data(data, data_type, required_fields):
 
 ### calculator.py
 - **Before**: 91 lines
-- **After**: 66 lines
-- **Reduction**: 27% (25 lines eliminated)
+- **After**: 69 lines
+- **Reduction**: 24% (22 lines eliminated)
 - **Benefits**: 
   - Eliminated 4 instances of duplicate validation
   - Simplified arithmetic operations to one-liners
