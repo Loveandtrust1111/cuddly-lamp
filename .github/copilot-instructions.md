@@ -79,6 +79,7 @@ This is a Python project demonstrating best practices in code organization, refa
            """Create a new entity."""
            validate_min_length(name, 3, "Name")
            record = self._create_record({'name': name})
+           print(f"Entity created: {name}")
            return record
    ```
 
@@ -89,7 +90,7 @@ This is a Python project demonstrating best practices in code organization, refa
 4. **Performance Considerations**:
    - See PERFORMANCE.md for optimization guidelines
    - Use appropriate data structures for the task
-   - Run benchmarks when making performance-related changes: `python3 benchmark.py`
+   - Run benchmarks when making performance-related changes: `python benchmark.py`
 
 ## Key Files
 
