@@ -115,12 +115,17 @@ class OptimizedDataProcessor:
                     unique.append(item)
             return unique
     
+    @staticmethod
     @lru_cache(maxsize=None)
-    def compute_fibonacci(self, n):
+    def compute_fibonacci_cached(n):
         """Compute fibonacci number - OPTIMIZED with memoization."""
         if n <= 1:
             return n
-        return self.compute_fibonacci(n - 1) + self.compute_fibonacci(n - 2)
+        return OptimizedDataProcessor.compute_fibonacci_cached(n - 1) + OptimizedDataProcessor.compute_fibonacci_cached(n - 2)
+    
+    def compute_fibonacci(self, n):
+        """Compute fibonacci number using cached static method."""
+        return self.compute_fibonacci_cached(n)
     
     def string_operations(self, words):
         """Perform string operations - OPTIMIZED with join."""
@@ -152,7 +157,10 @@ class OptimizedDataProcessor:
         """Clear all caches."""
         self.cache.clear()
         self.index.clear()
-        self.compute_fibonacci.cache_clear()
+        try:
+            OptimizedDataProcessor.compute_fibonacci_cached.cache_clear()
+        except AttributeError:
+            pass  # Cache not yet initialized
 
 
 def demo_optimized_performance():

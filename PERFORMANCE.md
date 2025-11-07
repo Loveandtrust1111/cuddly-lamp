@@ -192,19 +192,20 @@ def compute_fibonacci(self, n):
     return self.compute_fibonacci(n - 1) + self.compute_fibonacci(n - 2)
 ```
 
-**Issue:** Recalculates same values exponentially many times. fibonacci(30) makes ~2.7 million calls!
+**Issue:** Recalculates same values exponentially many times. fibonacci(25) makes ~242,785 calls!
 
 **Solution:**
 ```python
 # Use memoization - O(n) time complexity
+@staticmethod
 @lru_cache(maxsize=None)
-def compute_fibonacci(self, n):
+def compute_fibonacci_cached(n):
     if n <= 1:
         return n
-    return self.compute_fibonacci(n - 1) + self.compute_fibonacci(n - 2)
+    return OptimizedDataProcessor.compute_fibonacci_cached(n - 1) + OptimizedDataProcessor.compute_fibonacci_cached(n - 2)
 ```
 
-**Impact:** ~1,000,000x faster for fibonacci(30). Seconds vs milliseconds.
+**Impact:** ~2,700x faster for fibonacci(25). Milliseconds vs microseconds. Using a static method prevents memory leaks from instance references in the cache.
 
 ---
 

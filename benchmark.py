@@ -110,16 +110,16 @@ def run_benchmarks():
     print(f"  Improvement: {((orig_result['mean'] - opt_result['mean']) / orig_result['mean'] * 100):.1f}%")
     
     # Benchmark 5: Fibonacci
-    print("\n5. FIBONACCI(30)")
+    print("\n5. FIBONACCI(25)")
     print("-" * 80)
     
     print("Original implementation:")
-    orig_result = benchmark_function(original.compute_fibonacci, 30, iterations=1)
+    orig_result = benchmark_function(original.compute_fibonacci, 25, iterations=1)
     print(f"  Time: {orig_result['mean']:.4f}s")
     print(f"  Result: {orig_result['result']}")
     
     print("\nOptimized implementation:")
-    opt_result = benchmark_function(optimized.compute_fibonacci, 30)
+    opt_result = benchmark_function(optimized.compute_fibonacci, 25)
     print(f"  Average time: {opt_result['mean']:.6f}s")
     print(f"  Result: {opt_result['result']}")
     
