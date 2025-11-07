@@ -294,6 +294,23 @@ class TestMatrixMultiply:
         
         with pytest.raises(ValueError):
             optimized.matrix_multiply(matrix1, matrix2)
+    
+    def test_empty_matrix(self):
+        """Test with empty matrices."""
+        original = DataProcessor()
+        optimized = OptimizedDataProcessor()
+        
+        with pytest.raises(ValueError, match="empty"):
+            original.matrix_multiply([], [[1, 2]])
+        
+        with pytest.raises(ValueError, match="empty"):
+            optimized.matrix_multiply([], [[1, 2]])
+        
+        with pytest.raises(ValueError, match="empty"):
+            original.matrix_multiply([[]], [[1, 2]])
+        
+        with pytest.raises(ValueError, match="empty"):
+            optimized.matrix_multiply([[]], [[1, 2]])
 
 
 class TestSearchRecords:

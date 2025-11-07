@@ -134,6 +134,9 @@ class OptimizedDataProcessor:
     
     def matrix_multiply(self, matrix1, matrix2):
         """Multiply two matrices - OPTIMIZED with list comprehension."""
+        if not matrix1 or not matrix2 or not matrix1[0] or not matrix2[0]:
+            raise ValueError("Matrices cannot be empty")
+        
         rows1 = len(matrix1)
         cols1 = len(matrix1[0])
         rows2 = len(matrix2)
