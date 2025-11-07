@@ -1,62 +1,72 @@
-"""Product management module with duplicated code."""
+"""Product management module - refactored."""
+from src.base_manager import BaseManager
+from src.utils import validate_min_length, validate_positive_number
 
 
-class ProductManager:
+class ProductManager(BaseManager):
     """Manages product operations."""
     
     def __init__(self):
-        self.products = {}
+        """Initialize the product manager."""
+        super().__init__()
+        self.products = self._storage
     
     def create_product(self, name, description, price):
-        """Create a new product."""
-        # Validation - duplicated code pattern 1
-        if not name or len(name) < 3:
-            raise ValueError("Product name must be at least 3 characters long")
-        if not description or len(description) < 10:
-            raise ValueError("Description must be at least 10 characters long")
-        if not price or price <= 0:
-            raise ValueError("Price must be greater than 0")
+        """Create a new product.
         
-        # Database operation - duplicated code pattern 2
-        product_id = len(self.products) + 1
-        product_data = {
-            'id': product_id,
+        Args:
+            name: Product name (min 3 characters).
+            description: Product description (min 10 characters).
+            price: Product price (must be positive).
+            
+        Returns:
+            dict: The created product record.
+            
+        Raises:
+            ValueError: If validation fails.
+        """
+        # Validation using extracted utilities
+        validate_min_length(name, 3, "Product name")
+        validate_min_length(description, 10, "Description")
+        validate_positive_number(price, "Price")
+        
+        # Create record using base class method
+        product_data = self._create_record({
             'name': name,
             'description': description,
-            'price': price,
-            'created_at': self._get_timestamp(),
-            'updated_at': self._get_timestamp()
-        }
-        self.products[product_id] = product_data
+            'price': price
+        })
         print(f"Product created: {name}")
         return product_data
     
     def update_product(self, product_id, name=None, description=None, price=None):
-        """Update an existing product."""
-        if product_id not in self.products:
-            raise ValueError("Product not found")
+        """Update an existing product.
         
-        # Validation - duplicated code pattern 1
-        if name and len(name) < 3:
-            raise ValueError("Product name must be at least 3 characters long")
-        if description and len(description) < 10:
-            raise ValueError("Description must be at least 10 characters long")
-        if price and price <= 0:
-            raise ValueError("Price must be greater than 0")
+        Args:
+            product_id: ID of the product to update.
+            name: New product name (optional).
+            description: New description (optional).
+            price: New price (optional).
+            
+        Returns:
+            dict: The updated product record.
+            
+        Raises:
+            ValueError: If validation fails or product not found.
+        """
+        # Validation using extracted utilities
+        if name is not None:
+            validate_min_length(name, 3, "Product name")
+        if description is not None:
+            validate_min_length(description, 10, "Description")
+        if price is not None:
+            validate_positive_number(price, "Price")
         
-        # Database operation - duplicated code pattern 2
-        product_data = self.products[product_id]
-        if name:
-            product_data['name'] = name
-        if description:
-            product_data['description'] = description
-        if price:
-            product_data['price'] = price
-        product_data['updated_at'] = self._get_timestamp()
+        # Update record using base class method
+        product_data = self._update_record(product_id, {
+            'name': name,
+            'description': description,
+            'price': price
+        }, entity_name="Product")
         print(f"Product updated: {product_data['name']}")
         return product_data
-    
-    def _get_timestamp(self):
-        """Get current timestamp."""
-        from datetime import datetime
-        return datetime.now().isoformat()

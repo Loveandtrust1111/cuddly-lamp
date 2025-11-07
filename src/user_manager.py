@@ -1,62 +1,72 @@
-"""User management module with duplicated code."""
+"""User management module - refactored."""
+from src.base_manager import BaseManager
+from src.utils import validate_min_length, validate_email
 
 
-class UserManager:
+class UserManager(BaseManager):
     """Manages user operations."""
     
     def __init__(self):
-        self.users = {}
+        """Initialize the user manager."""
+        super().__init__()
+        self.users = self._storage
     
     def create_user(self, username, email, password):
-        """Create a new user."""
-        # Validation - duplicated code pattern 1
-        if not username or len(username) < 3:
-            raise ValueError("Username must be at least 3 characters long")
-        if not email or '@' not in email:
-            raise ValueError("Invalid email address")
-        if not password or len(password) < 8:
-            raise ValueError("Password must be at least 8 characters long")
+        """Create a new user.
         
-        # Database operation - duplicated code pattern 2
-        user_id = len(self.users) + 1
-        user_data = {
-            'id': user_id,
+        Args:
+            username: User's username (min 3 characters).
+            email: User's email address.
+            password: User's password (min 8 characters).
+            
+        Returns:
+            dict: The created user record.
+            
+        Raises:
+            ValueError: If validation fails.
+        """
+        # Validation using extracted utilities
+        validate_min_length(username, 3, "Username")
+        validate_email(email)
+        validate_min_length(password, 8, "Password")
+        
+        # Create record using base class method
+        user_data = self._create_record({
             'username': username,
             'email': email,
-            'password': password,
-            'created_at': self._get_timestamp(),
-            'updated_at': self._get_timestamp()
-        }
-        self.users[user_id] = user_data
+            'password': password
+        })
         print(f"User created: {username}")
         return user_data
     
     def update_user(self, user_id, username=None, email=None, password=None):
-        """Update an existing user."""
-        if user_id not in self.users:
-            raise ValueError("User not found")
+        """Update an existing user.
         
-        # Validation - duplicated code pattern 1
-        if username and len(username) < 3:
-            raise ValueError("Username must be at least 3 characters long")
-        if email and '@' not in email:
-            raise ValueError("Invalid email address")
-        if password and len(password) < 8:
-            raise ValueError("Password must be at least 8 characters long")
+        Args:
+            user_id: ID of the user to update.
+            username: New username (optional).
+            email: New email (optional).
+            password: New password (optional).
+            
+        Returns:
+            dict: The updated user record.
+            
+        Raises:
+            ValueError: If validation fails or user not found.
+        """
+        # Validation using extracted utilities
+        if username is not None:
+            validate_min_length(username, 3, "Username")
+        if email is not None:
+            validate_email(email)
+        if password is not None:
+            validate_min_length(password, 8, "Password")
         
-        # Database operation - duplicated code pattern 2
-        user_data = self.users[user_id]
-        if username:
-            user_data['username'] = username
-        if email:
-            user_data['email'] = email
-        if password:
-            user_data['password'] = password
-        user_data['updated_at'] = self._get_timestamp()
+        # Update record using base class method
+        user_data = self._update_record(user_id, {
+            'username': username,
+            'email': email,
+            'password': password
+        }, entity_name="User")
         print(f"User updated: {user_data['username']}")
         return user_data
-    
-    def _get_timestamp(self):
-        """Get current timestamp."""
-        from datetime import datetime
-        return datetime.now().isoformat()
