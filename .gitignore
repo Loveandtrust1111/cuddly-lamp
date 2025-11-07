@@ -45,3 +45,16 @@ temp/
 .env
 .env.local
 .env.*.local
+
+# Media Assets
+# Keep small optimized images, exclude large originals
+assets/images/originals/
+assets/videos/originals/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.flv
+# Exclude very large images (> 5MB typically)
+# Note: Small optimized images should be committed

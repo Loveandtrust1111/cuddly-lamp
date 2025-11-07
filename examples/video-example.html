@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Examples - Best Practices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .example {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .example h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎥 Video Best Practices Examples</h1>
+    
+    <p>This page demonstrates various best practices for using videos in web projects.</p>
+
+    <!-- Example 1: Basic HTML5 Video -->
+    <div class="example">
+        <h3>1. Basic HTML5 Video with Controls</h3>
+        <p>Simple video element with basic controls:</p>
+        <pre><code>&lt;video controls width="800"&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+    &lt;source src="video.webm" type="video/webm"&gt;
+    Your browser does not support the video tag.
+&lt;/video&gt;</code></pre>
+    </div>
+
+    <!-- Example 2: Video with Poster -->
+    <div class="example">
+        <h3>2. Video with Poster Image</h3>
+        <p>Display a thumbnail before the video loads:</p>
+        <pre><code>&lt;video controls width="800" poster="thumbnail.jpg"&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+    Your browser does not support the video tag.
+&lt;/video&gt;</code></pre>
+    </div>
+
+    <!-- Example 3: Autoplay Background Video -->
+    <div class="example">
+        <h3>3. Autoplay Background Video (Muted)</h3>
+        <p>Autoplay requires muted attribute:</p>
+        <pre><code>&lt;video autoplay muted loop playsinline&gt;
+    &lt;source src="background.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+        <p><strong>Note:</strong> Autoplay policies vary between browsers. Most require muting for autoplay without user interaction. Browsers also consider user engagement metrics (Media Engagement Index), site permissions, and whether the user has previously interacted with the site when deciding whether to allow autoplay.</p>
+    </div>
+
+    <!-- Example 4: Responsive Video -->
+    <div class="example">
+        <h3>4. Responsive Video Container</h3>
+        <p>Make video responsive with CSS:</p>
+        <pre><code>&lt;div class="video-container"&gt;
+    &lt;video controls&gt;
+        &lt;source src="video.mp4" type="video/mp4"&gt;
+    &lt;/video&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+&lt;/style&gt;</code></pre>
+    </div>
+
+    <!-- Example 5: Video with Captions -->
+    <div class="example">
+        <h3>5. Video with Subtitles/Captions</h3>
+        <p>Add accessibility with WebVTT captions:</p>
+        <pre><code>&lt;video controls&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+    &lt;track kind="subtitles" src="subtitles-en.vtt" srclang="en" label="English" default&gt;
+    &lt;track kind="subtitles" src="subtitles-es.vtt" srclang="es" label="Español"&gt;
+&lt;/video&gt;</code></pre>
+    </div>
+
+    <!-- Example 6: Video with Multiple Sources -->
+    <div class="example">
+        <h3>6. Multiple Video Sources for Browser Support</h3>
+        <p>Provide multiple formats for better compatibility:</p>
+        <pre><code>&lt;video controls width="800" poster="thumbnail.jpg"&gt;
+    &lt;source src="video.webm" type="video/webm"&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+    &lt;source src="video.ogv" type="video/ogg"&gt;
+    &lt;p&gt;Your browser doesn't support HTML5 video.
+       &lt;a href="video.mp4"&gt;Download the video&lt;/a&gt; instead.&lt;/p&gt;
+&lt;/video&gt;</code></pre>
+    </div>
+
+    <!-- Example 7: Embedded Video (YouTube) -->
+    <div class="example">
+        <h3>7. Embedded Video from YouTube</h3>
+        <p>Use iframe for hosted videos:</p>
+        <pre><code>&lt;div class="video-container"&gt;
+    &lt;iframe 
+        width="800" 
+        height="450" 
+        src="https://www.youtube.com/embed/VIDEO_ID" 
+        title="Video title"
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <!-- Example 8: Video with JavaScript Controls -->
+    <div class="example">
+        <h3>8. Custom Video Controls with JavaScript</h3>
+        <p>Build custom video player controls:</p>
+        <pre><code>&lt;video id="myVideo" width="800"&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+&lt;div class="controls"&gt;
+    &lt;button id="playPause"&gt;Play&lt;/button&gt;
+    &lt;input type="range" id="seekBar" value="0"&gt;
+    &lt;button id="mute"&gt;Mute&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const video = document.getElementById('myVideo');
+const playPause = document.getElementById('playPause');
+const seekBar = document.getElementById('seekBar');
+
+playPause.addEventListener('click', () =&gt; {
+    if (video.paused) {
+        video.play();
+        playPause.textContent = 'Pause';
+    } else {
+        video.pause();
+        playPause.textContent = 'Play';
+    }
+});
+
+video.addEventListener('timeupdate', () =&gt; {
+    const value = (video.currentTime / video.duration) * 100;
+    seekBar.value = value;
+});
+
+seekBar.addEventListener('input', () =&gt; {
+    const time = (seekBar.value / 100) * video.duration;
+    video.currentTime = time;
+});
+&lt;/script&gt;</code></pre>
+    </div>
+
+    <hr style="margin: 40px 0;">
+    
+    <h2>📊 Video Format Guide</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Format</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Codec</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Browser Support</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Best For</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>MP4</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">H.264</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Universal</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Most compatible</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>WebM</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">VP9</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Chrome, Firefox, Edge</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Better compression</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>OGG</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Theora</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Firefox, Chrome</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Legacy support</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr style="margin: 40px 0;">
+    
+    <h2>✅ Checklist for Optimal Videos</h2>
+    <ul style="font-size: 16px;">
+        <li>☑️ Provide multiple formats (MP4, WebM) for browser compatibility</li>
+        <li>☑️ Include a poster image for better UX</li>
+        <li>☑️ Add captions/subtitles for accessibility</li>
+        <li>☑️ Optimize file size with appropriate bitrate</li>
+        <li>☑️ Use appropriate resolution (1080p, 720p, 480p)</li>
+        <li>☑️ Enable faststart flag for web streaming</li>
+        <li>☑️ Provide fallback content for unsupported browsers</li>
+        <li>☑️ Consider lazy loading for below-the-fold videos</li>
+        <li>☑️ Host large videos on platforms like YouTube/Vimeo</li>
+        <li>☑️ Test on various devices and connections</li>
+    </ul>
+
+    <hr style="margin: 40px 0;">
+    
+    <h2>⚡ Performance Tips</h2>
+    <div style="background: #fffbcc; padding: 15px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="margin-top: 0;">Video File Size Recommendations</h3>
+        <ul>
+            <li><strong>Short clips (&lt; 30s):</strong> 10-20 MB at 720p</li>
+            <li><strong>Medium videos (1-2 min):</strong> 20-50 MB at 720p</li>
+            <li><strong>Longer videos:</strong> Consider streaming services</li>
+        </ul>
+        <p><strong>Bitrate Guidelines:</strong></p>
+        <ul>
+            <li>480p: 1-2 Mbps</li>
+            <li>720p: 2-5 Mbps</li>
+            <li>1080p: 5-10 Mbps</li>
+        </ul>
+    </div>
+
+    <footer style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #ddd; color: #666;">
+        <p>For more information, see the <a href="../MEDIA_GUIDE.md">complete Media Guide</a> and <a href="../IMAGE_VIDEO_QUICKSTART.md">Quick Start Guide</a>.</p>
+    </footer>
+</body>
+</html>
