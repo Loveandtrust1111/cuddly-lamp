@@ -9,6 +9,18 @@ set -e
 QUALITY=85
 MAX_WIDTH=1920
 TARGET_DIR=""
+CURRENT_BACKUP=""
+
+# Cleanup function to remove backup files on error
+cleanup() {
+    if [ -n "$CURRENT_BACKUP" ] && [ -f "$CURRENT_BACKUP" ]; then
+        echo "Cleaning up backup file: $CURRENT_BACKUP"
+        rm -f "$CURRENT_BACKUP"
+    fi
+}
+
+# Set trap to cleanup on exit
+trap cleanup EXIT ERR
 
 # Display usage information
 usage() {
@@ -111,6 +123,7 @@ for ext in jpg jpeg png gif bmp tiff; do
         
         # Create backup
         BACKUP="${file}.bak"
+        CURRENT_BACKUP="$BACKUP"
         cp "$file" "$BACKUP"
         
         # Resize and optimize
@@ -124,6 +137,7 @@ for ext in jpg jpeg png gif bmp tiff; do
         
         # Remove backup after successful processing
         rm "$BACKUP"
+        CURRENT_BACKUP=""
         PROCESSED=$((PROCESSED + 1))
         
     done < <(find "$TARGET_DIR" -type f -iname "*.${ext}" -print0)

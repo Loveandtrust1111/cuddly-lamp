@@ -98,23 +98,25 @@ DIRNAME=$(dirname "$INPUT_FILE")
 # Generate output filename
 OUTPUT_FILE="${DIRNAME}/${FILENAME}_processed.mp4"
 
-# Build FFmpeg command
-FFMPEG_CMD="ffmpeg -i \"$INPUT_FILE\" -y"
+# Process video
+echo "Converting video..."
+
+# Build FFmpeg command using array to avoid eval and command injection
+FFMPEG_ARGS=(-i "$INPUT_FILE" -y)
 
 # Add resolution scaling if specified
 if [ -n "$RESOLUTION" ]; then
-    FFMPEG_CMD="$FFMPEG_CMD -vf scale=$RESOLUTION"
+    FFMPEG_ARGS+=(-vf "scale=$RESOLUTION")
 fi
 
 # Add video codec and quality settings
-FFMPEG_CMD="$FFMPEG_CMD -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k"
+FFMPEG_ARGS+=(-c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k)
 
 # Add output file
-FFMPEG_CMD="$FFMPEG_CMD \"$OUTPUT_FILE\""
+FFMPEG_ARGS+=("$OUTPUT_FILE")
 
-# Process video
-echo "Converting video..."
-eval $FFMPEG_CMD
+# Execute FFmpeg
+ffmpeg "${FFMPEG_ARGS[@]}"
 
 if [ $? -eq 0 ]; then
     echo "✓ Video converted successfully: $OUTPUT_FILE"
@@ -129,8 +131,18 @@ if [ "$GENERATE_THUMBNAIL" = true ]; then
     echo ""
     echo "Generating thumbnail..."
     
-    # Extract frame at 1 second or 10% of video duration, whichever is smaller
-    ffmpeg -i "$INPUT_FILE" -ss 00:00:01 -vframes 1 -q:v 2 "$THUMBNAIL_FILE" -y 2>/dev/null
+    # Get video duration in seconds
+    DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT_FILE" 2>/dev/null || echo "0")
+    
+    # Calculate thumbnail timestamp (10% of duration or 0.5 seconds, whichever is smaller)
+    if [ "$DURATION" != "0" ]; then
+        THUMB_TIME=$(awk -v d="$DURATION" 'BEGIN {t = d * 0.1; if (t > 0.5) t = 0.5; if (t < 0) t = 0; printf "%.2f", t}')
+    else
+        THUMB_TIME="0"
+    fi
+    
+    # Extract frame at calculated timestamp
+    ffmpeg -i "$INPUT_FILE" -ss "$THUMB_TIME" -vframes 1 -q:v 2 "$THUMBNAIL_FILE" -y 2>/dev/null
     
     if [ $? -eq 0 ]; then
         echo "✓ Thumbnail generated: $THUMBNAIL_FILE"
