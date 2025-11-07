@@ -107,8 +107,8 @@ echo ""
 PROCESSED=0
 SKIPPED=0
 
-# Process common image formats
-for ext in jpg jpeg png gif bmp tiff; do
+# Process common image formats (case-insensitive via find -iname)
+for ext in jpg jpeg png gif bmp tiff webp; do
     while IFS= read -r -d '' file; do
         echo "Processing: $file"
         

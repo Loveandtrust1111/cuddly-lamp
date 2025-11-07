@@ -132,10 +132,11 @@ if [ "$GENERATE_THUMBNAIL" = true ]; then
     echo "Generating thumbnail..."
     
     # Get video duration in seconds
-    DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT_FILE" 2>/dev/null || echo "1.0")
+    DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT_FILE" 2>/dev/null)
     
-    # Validate that DURATION is a valid number
-    if ! [[ "$DURATION" =~ ^[0-9]+\.?[0-9]*$ ]]; then
+    # Validate that DURATION is a valid number, use 1.0 as safe default if probe fails
+    if ! [[ "$DURATION" =~ ^[0-9]+\.?[0-9]*$ ]] || [ -z "$DURATION" ]; then
+        echo "  Warning: Could not determine video duration, using default timestamp"
         DURATION="1.0"
     fi
     
@@ -148,10 +149,18 @@ if [ "$GENERATE_THUMBNAIL" = true ]; then
         printf "%.2f", t
     }')
     
-    # Extract frame at calculated timestamp, show errors for debugging
-    ffmpeg -i "$INPUT_FILE" -ss "$THUMB_TIME" -vframes 1 -q:v 2 "$THUMBNAIL_FILE" -y 2>&1 | grep -v "^frame=" | grep -v "^Stream " | grep -v "^  " | grep -v "^$" || true
+    # Extract frame at calculated timestamp
+    # Capture exit code before filtering output
+    FFMPEG_OUTPUT=$(ffmpeg -i "$INPUT_FILE" -ss "$THUMB_TIME" -vframes 1 -q:v 2 "$THUMBNAIL_FILE" -y 2>&1)
+    FFMPEG_EXIT=$?
     
-    if [ $? -eq 0 ]; then
+    # Show relevant errors if any (filter out verbose info)
+    if [ $FFMPEG_EXIT -ne 0 ]; then
+        echo "$FFMPEG_OUTPUT" | grep -i "error" | head -5
+    fi
+    
+    # Check if thumbnail was created successfully
+    if [ $FFMPEG_EXIT -eq 0 ] && [ -f "$THUMBNAIL_FILE" ]; then
         echo "✓ Thumbnail generated: $THUMBNAIL_FILE"
     else
         echo "✗ Error generating thumbnail"
