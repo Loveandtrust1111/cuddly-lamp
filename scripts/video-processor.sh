@@ -135,16 +135,19 @@ if [ "$GENERATE_THUMBNAIL" = true ]; then
     DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT_FILE" 2>/dev/null)
     
     # Validate that DURATION is a valid number, use 1.0 as safe default if probe fails
-    if ! [[ "$DURATION" =~ ^[0-9]+\.?[0-9]*$ ]] || [ -z "$DURATION" ]; then
+    # Support both integer and floating point formats (including leading decimal like .5)
+    if ! [[ "$DURATION" =~ ^[0-9]*\.?[0-9]+$|^[0-9]+$ ]] || [ -z "$DURATION" ]; then
         echo "  Warning: Could not determine video duration, using default timestamp"
         DURATION="1.0"
     fi
     
-    # Calculate thumbnail timestamp (minimum of 10% of duration or 0.5 seconds)
+    # Calculate thumbnail timestamp: use 10% of duration, but cap at 0.5 seconds max
+    # For short videos (< 5s): use 10% (e.g., 0.3s for 3s video)
+    # For longer videos (>= 5s): use 0.5s max (e.g., 0.5s for 10s video, not 1.0s)
     THUMB_TIME=$(awk -v d="$DURATION" 'BEGIN {
         ten_percent = d * 0.1;
-        threshold = 0.5;
-        t = (ten_percent < threshold) ? ten_percent : threshold;
+        max_time = 0.5;
+        t = (ten_percent < max_time) ? ten_percent : max_time;
         if (t < 0) t = 0;
         printf "%.2f", t
     }')

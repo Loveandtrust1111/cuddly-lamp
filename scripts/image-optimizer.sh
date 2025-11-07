@@ -112,11 +112,27 @@ for ext in jpg jpeg png gif bmp tiff webp; do
     while IFS= read -r -d '' file; do
         echo "Processing: $file"
         
-        # Get image dimensions
-        WIDTH=$(identify -format "%w" "$file" 2>/dev/null || echo "0")
+        # Get image dimensions and check for errors
+        set +e  # Temporarily disable exit on error
+        WIDTH_OUTPUT=$(identify -format "%w" "$file" 2>&1)
+        WIDTH_EXIT=$?
+        set -e  # Re-enable exit on error
         
-        if [ "$WIDTH" -eq 0 ]; then
-            echo "  Skipped: Could not read image"
+        if [ $WIDTH_EXIT -ne 0 ]; then
+            if echo "$WIDTH_OUTPUT" | grep -qi "permission denied"; then
+                echo "  Skipped: Permission denied"
+            elif echo "$WIDTH_OUTPUT" | grep -qi "no such file"; then
+                echo "  Skipped: File not found"
+            else
+                echo "  Skipped: Could not read image (corrupted or unsupported format)"
+            fi
+            SKIPPED=$((SKIPPED + 1))
+            continue
+        fi
+        
+        WIDTH="$WIDTH_OUTPUT"
+        if ! [[ "$WIDTH" =~ ^[0-9]+$ ]]; then
+            echo "  Skipped: Invalid image dimensions"
             SKIPPED=$((SKIPPED + 1))
             continue
         fi
