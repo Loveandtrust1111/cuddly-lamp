@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Examples - Best Practices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .example {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .example h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Image Best Practices Examples</h1>
+    
+    <p>This page demonstrates various best practices for using images in web projects.</p>
+
+    <!-- Example 1: Basic Image with Alt Text -->
+    <div class="example">
+        <h3>1. Basic Image with Alt Text</h3>
+        <p>Always include descriptive alt text for accessibility:</p>
+        <pre><code>&lt;img src="photo.jpg" 
+     alt="A scenic mountain landscape at sunset with orange and purple sky"
+     width="800"
+     height="600"&gt;</code></pre>
+    </div>
+
+    <!-- Example 2: Responsive Images -->
+    <div class="example">
+        <h3>2. Responsive Images with srcset</h3>
+        <p>Serve different image sizes for different screen sizes:</p>
+        <pre><code>&lt;img srcset="photo-400.jpg 400w,
+             photo-800.jpg 800w,
+             photo-1200.jpg 1200w"
+     sizes="(max-width: 600px) 400px,
+            (max-width: 1000px) 800px,
+            1200px"
+     src="photo-800.jpg"
+     alt="Responsive image example"&gt;</code></pre>
+    </div>
+
+    <!-- Example 3: Modern Image Formats -->
+    <div class="example">
+        <h3>3. Modern Image Formats with Fallback</h3>
+        <p>Use modern formats like WebP with fallbacks:</p>
+        <pre><code>&lt;picture&gt;
+    &lt;source srcset="photo.webp" type="image/webp"&gt;
+    &lt;source srcset="photo.jpg" type="image/jpeg"&gt;
+    &lt;img src="photo.jpg" alt="Modern format example"&gt;
+&lt;/picture&gt;</code></pre>
+    </div>
+
+    <!-- Example 4: Lazy Loading -->
+    <div class="example">
+        <h3>4. Lazy Loading Images</h3>
+        <p>Defer loading of off-screen images:</p>
+        <pre><code>&lt;img src="photo.jpg" 
+     alt="Lazy loaded image"
+     loading="lazy"
+     width="800"
+     height="600"&gt;</code></pre>
+    </div>
+
+    <!-- Example 5: Figure with Caption -->
+    <div class="example">
+        <h3>5. Semantic Image with Caption</h3>
+        <p>Use figure and figcaption for images with captions:</p>
+        <pre><code>&lt;figure&gt;
+    &lt;img src="photo.jpg" alt="Mountain landscape"&gt;
+    &lt;figcaption&gt;Beautiful mountain landscape&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+    </div>
+
+    <!-- Example 6: CSS Background Images -->
+    <div class="example">
+        <h3>6. CSS Background Images (Responsive)</h3>
+        <p>Use CSS for decorative images:</p>
+        <pre><code>.hero {
+    background-image: url('photo.jpg');
+    background-size: cover;
+    background-position: center;
+}</code></pre>
+    </div>
+
+    <!-- Example 7: SVG Icons -->
+    <div class="example">
+        <h3>7. SVG Icons (Inline)</h3>
+        <p>Use inline SVG for icons that need styling:</p>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+        </svg>
+        <pre><code>&lt;svg width="48" height="48" viewBox="0 0 24 24"&gt;
+    &lt;circle cx="12" cy="12" r="10"&gt;&lt;/circle&gt;
+    &lt;path d="M12 6v6l4 2"&gt;&lt;/path&gt;
+&lt;/svg&gt;</code></pre>
+    </div>
+
+    <!-- Example 8: Image with Loading Placeholder -->
+    <div class="example">
+        <h3>8. Progressive Image Loading</h3>
+        <p>Show a low-quality placeholder while loading:</p>
+        <pre><code>// JavaScript
+const img = document.querySelector('.progressive-image');
+const highRes = new Image();
+highRes.src = img.dataset.src;
+highRes.onload = () => {
+    img.src = highRes.src;
+    img.classList.add('loaded');
+};</code></pre>
+    </div>
+
+    <hr style="margin: 40px 0;">
+    
+    <h2>📊 Image Format Guide</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Format</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Best For</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Pros</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Cons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>JPEG</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Photographs</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Small file size, universal support</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">No transparency, lossy</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>PNG</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Graphics, logos</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Transparency, lossless</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Larger file size</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>WebP</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Web images</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Better compression, transparency</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Limited older browser support</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>SVG</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Icons, logos</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Scalable, small size, CSS styling</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Not for complex images</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr style="margin: 40px 0;">
+    
+    <h2>✅ Checklist for Optimal Images</h2>
+    <ul style="font-size: 16px;">
+        <li>☑️ Use descriptive alt text for accessibility</li>
+        <li>☑️ Specify width and height to prevent layout shift</li>
+        <li>☑️ Optimize file size (target &lt; 500KB)</li>
+        <li>☑️ Use appropriate format (JPEG for photos, PNG for graphics)</li>
+        <li>☑️ Implement responsive images with srcset</li>
+        <li>☑️ Enable lazy loading for below-the-fold images</li>
+        <li>☑️ Consider WebP format with JPEG/PNG fallback</li>
+        <li>☑️ Use CDN for faster delivery</li>
+        <li>☑️ Test on various devices and screen sizes</li>
+    </ul>
+
+    <footer style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #ddd; color: #666;">
+        <p>For more information, see the <a href="../MEDIA_GUIDE.md">complete Media Guide</a> and <a href="../IMAGE_VIDEO_QUICKSTART.md">Quick Start Guide</a>.</p>
+    </footer>
+</body>
+</html>
