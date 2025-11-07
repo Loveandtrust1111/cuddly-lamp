@@ -27,6 +27,9 @@ yarn-error.log*
 # Dependencies
 node_modules/
 vendor/
+__pycache__/
+*.pyc
+*.pyo
 
 # Build outputs
 dist/
