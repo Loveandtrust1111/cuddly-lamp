@@ -37,8 +37,8 @@ def efficient_file_reading_generator(filename):
     Memory: O(1) per line - truly memory efficient
     """
     try:
-        with open(filename, 'r') as f:
-            for line in f:
+        with open(filename, 'r') as file:
+            for line in file:
                 yield line.upper()
     except FileNotFoundError:
         print(f"Warning: File {filename} not found")
@@ -52,8 +52,8 @@ def efficient_file_reading(filename):
     Note: For truly memory-efficient processing, use the generator version above.
     """
     try:
-        with open(filename, 'r') as f:
-            return [line.upper() for line in f]
+        with open(filename, 'r') as file:
+            return [line.upper() for line in file]
     except FileNotFoundError:
         print(f"Warning: File {filename} not found")
         return []
@@ -112,7 +112,7 @@ def efficient_local_variable():
     and code clarity.
     """
     counter = 0
-    for i in range(1000000):
+    for iteration in range(1000000):
         counter += 1
     return counter
 

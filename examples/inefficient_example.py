@@ -51,8 +51,8 @@ def inefficient_file_reading(filename):
     In production code, always add proper error handling.
     """
     try:
-        with open(filename, 'r') as f:
-            content = f.read()
+        with open(filename, 'r') as file:
+            content = file.read()
             lines = content.split('\n')
             return [line.upper() for line in lines]
     except FileNotFoundError:
@@ -125,7 +125,7 @@ def inefficient_global_variable():
     """
     global global_counter
     global_counter = 0
-    for i in range(1000000):
+    for iteration in range(1000000):
         global_counter += 1
     return global_counter
 

@@ -57,65 +57,65 @@ def main():
     # Benchmark 1: String Concatenation
     print("\n[1] String Concatenation (10,000 items)")
     items = range(10000)
-    ineff_time, _ = benchmark(inefficient_list_concatenation, items)
-    eff_time, _ = benchmark(efficient_list_concatenation, items)
-    print_benchmark_result("String Concatenation", ineff_time, eff_time)
+    inefficient_time, _ = benchmark(inefficient_list_concatenation, items)
+    efficient_time, _ = benchmark(efficient_list_concatenation, items)
+    print_benchmark_result("String Concatenation", inefficient_time, efficient_time)
     
     # Benchmark 2: List Search (Duplicate Removal)
     print("\n[2] List Search - Duplicate Removal (1,000 items with duplicates)")
     data = list(range(100)) * 10
-    ineff_time, ineff_result = benchmark(inefficient_list_search, data, None)
-    eff_time, eff_result = benchmark(efficient_list_search, data, None)
-    print_benchmark_result("List Search", ineff_time, eff_time)
-    print(f"  Results match: {set(ineff_result) == set(eff_result)}")
+    inefficient_time, inefficient_result = benchmark(inefficient_list_search, data, None)
+    efficient_time, efficient_result = benchmark(efficient_list_search, data, None)
+    print_benchmark_result("List Search", inefficient_time, efficient_time)
+    print(f"  Results match: {set(inefficient_result) == set(efficient_result)}")
     
     # Benchmark 3: Nested Loops (Finding Common Elements)
     print("\n[3] Nested Loops - Finding Common Elements")
     list1 = list(range(1000))
     list2 = list(range(500, 1500))
-    ineff_time, ineff_result = benchmark(inefficient_nested_loops, list1, list2)
-    eff_time, eff_result = benchmark(efficient_nested_loops, list1, list2)
-    print_benchmark_result("Nested Loops", ineff_time, eff_time)
-    print(f"  Results match: {set(ineff_result) == set(eff_result)}")
+    inefficient_time, inefficient_result = benchmark(inefficient_nested_loops, list1, list2)
+    efficient_time, efficient_result = benchmark(efficient_nested_loops, list1, list2)
+    print_benchmark_result("Nested Loops", inefficient_time, efficient_time)
+    print(f"  Results match: {set(inefficient_result) == set(efficient_result)}")
     
     # Benchmark 4: Data Processing
     print("\n[4] Data Processing - Filter, Square, Sum (100,000 items)")
     data = list(range(-50000, 50000))
-    ineff_time, ineff_result = benchmark(inefficient_data_processing, data)
-    eff_time, eff_result = benchmark(efficient_data_processing, data)
-    print_benchmark_result("Data Processing", ineff_time, eff_time)
-    print(f"  Results match: {ineff_result == eff_result}")
+    inefficient_time, inefficient_result = benchmark(inefficient_data_processing, data)
+    efficient_time, efficient_result = benchmark(efficient_data_processing, data)
+    print_benchmark_result("Data Processing", inefficient_time, efficient_time)
+    print(f"  Results match: {inefficient_result == efficient_result}")
     
     # Benchmark 5: Dictionary Operations
     print("\n[5] Dictionary Operations - Counting (10,000 items)")
-    data = [i % 100 for i in range(10000)]
-    ineff_time, ineff_result = benchmark(inefficient_dictionary_lookup, data)
-    eff_time, eff_result = benchmark(efficient_dictionary_lookup_counter, data)
-    print_benchmark_result("Dictionary Lookup", ineff_time, eff_time)
-    print(f"  Results match: {ineff_result == eff_result}")
+    data = [item_value % 100 for item_value in range(10000)]
+    inefficient_time, inefficient_result = benchmark(inefficient_dictionary_lookup, data)
+    efficient_time, efficient_result = benchmark(efficient_dictionary_lookup_counter, data)
+    print_benchmark_result("Dictionary Lookup", inefficient_time, efficient_time)
+    print(f"  Results match: {inefficient_result == efficient_result}")
     
     # Benchmark 6: Data Structure Operations
     print("\n[6] Data Structure Operations - Add/Check (10,000 operations)")
     
-    def test_inefficient_ds():
-        ds = InefficientDataStructure()
-        for i in range(1000):
-            ds.add_item(i)
-        for i in range(1000):
-            ds.has_item(i % 500)
-        return ds
+    def test_inefficient_data_structure():
+        data_structure = InefficientDataStructure()
+        for item_index in range(1000):
+            data_structure.add_item(item_index)
+        for operation_num in range(1000):
+            data_structure.has_item(operation_num % 500)
+        return data_structure
     
-    def test_efficient_ds():
-        ds = EfficientDataStructure()
-        for i in range(1000):
-            ds.add_item(i)
-        for i in range(1000):
-            ds.has_item(i % 500)
-        return ds
+    def test_efficient_data_structure():
+        data_structure = EfficientDataStructure()
+        for item_index in range(1000):
+            data_structure.add_item(item_index)
+        for operation_num in range(1000):
+            data_structure.has_item(operation_num % 500)
+        return data_structure
     
-    ineff_time, _ = benchmark(test_inefficient_ds)
-    eff_time, _ = benchmark(test_efficient_ds)
-    print_benchmark_result("Data Structure Operations", ineff_time, eff_time)
+    inefficient_time, _ = benchmark(test_inefficient_data_structure)
+    efficient_time, _ = benchmark(test_efficient_data_structure)
+    print_benchmark_result("Data Structure Operations", inefficient_time, efficient_time)
     
     # Summary
     print("\n" + "=" * 60)
